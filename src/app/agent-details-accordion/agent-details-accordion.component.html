@@ -1,0 +1,43 @@
+@if (agent) {
+<div class="collapse collapse-arrow bg-base-200">
+  <input type="radio" name="my-accordion-2" checked="checked" />
+  <div
+    class="collapse-title text-xl font-medium flex items-center justify-between"
+  >
+    <div class="flex items-center">
+      <div class="w-10 mx-5">
+        <img
+          class="rounded-full"
+          alt="Tailwind CSS Navbar component"
+          src="https://api.dicebear.com/7.x/micah/svg?seed=Felix{{
+            agent.name
+          }}"
+        />
+      </div>
+      {{ agent.name }}
+    </div>
+    <div class="z-50">
+      <ul class="menu menu-vertical lg:menu-horizontal bg-base-200 rounded-box">
+        <li><button>Manage</button></li>
+      </ul>
+      <div class="badge badge-secondary p-2 badge-lg">{{ agent.model }}</div>
+    </div>
+  </div>
+  <div class="collapse-content">
+    <p class="my-2 font-bold">Created: {{ agent.created | date }}</p>
+    @if (agent.systemMessage) {
+    <div class="mockup-code bg-base-300">
+      <pre
+        data-prefix=""
+        class="bg-blue-600 text-warning-content"
+      ><code>Agent System Message</code></pre>
+      <pre data-prefix="1"><code>{{agent.systemMessage}}</code></pre>
+    </div>
+    }
+    <div>
+      <p class="font-bold my-4">File Sources</p>
+      <app-file-tree></app-file-tree>
+    </div>
+  </div>
+</div>
+}

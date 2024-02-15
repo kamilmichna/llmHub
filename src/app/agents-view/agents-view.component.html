@@ -1,0 +1,13 @@
+<div>
+  <div class="card-body">
+    <div class="flex justify-between my-2">
+      <h2 class="card-title mb-2">Manage your AI Agents</h2>
+      <button class="btn btn-primary btn-sm">Create new</button>
+    </div>
+    @if (agents$ | async; as agents) { 
+      @for (agent of agents; track agent) {
+        <app-agent-details-accordion [agent]="agent"></app-agent-details-accordion>
+      } 
+    }
+  </div>
+</div>
