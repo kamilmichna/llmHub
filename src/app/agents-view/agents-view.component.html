@@ -2,7 +2,9 @@
   <div class="card-body">
     <div class="flex justify-between my-2">
       <h2 class="card-title mb-2">Manage your AI Agents</h2>
-      <button class="btn btn-primary btn-sm">Create new</button>
+      <a routerLink="/agents" routerLinkActive="true">
+        <button class="btn btn-primary btn-sm">Create new</button>
+      </a>
     </div>
     @if (agents$ | async; as agents) { 
       @for (agent of agents; track agent) {

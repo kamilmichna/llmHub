@@ -1,0 +1,29 @@
+ <div class="p-5">
+<a routerLink="/dashboard" routerLinkActive="true" >
+    <button class="btn btn-primary btn-sm">Go Back</button></a
+  >
+<div class="w-100 flex justify-center mt-10">
+  <div class="card w-96 shadow-xl bg-base-200">
+    <div class="card-body flex">
+      @if (isNewAgentMode()) {
+        <h2 class="card-title">Create new Agent</h2>
+      } @else {
+        <h2 class="card-title">Edit Agent</h2>
+      }
+      <label class="my-2">
+        Name of your Agent
+      </label>
+      <input type="text" placeholder="Ex. Superhuman" class="input input-bordered w-full max-w-xs mb-2" />
+      <label>Select Model</label>
+      <select class="select select-bordered w-full max-w-xs mb-2">
+        <option disabled selected>Model</option>
+        <option>GPT-4</option>
+        <option>Claude</option>
+      </select>
+      <label>System Message (not required)</label>
+      <textarea class="textarea textarea-bordered textarea-md w-full max-w-xs" ></textarea>
+    </div>
+  </div>
+</div>
+
+ </div> 
