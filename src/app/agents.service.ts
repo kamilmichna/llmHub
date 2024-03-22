@@ -8,7 +8,7 @@ export interface Agent {
     systemMessage?: string;
 }
 
-const agentsMock: Agent[] = [
+export const agentsMock: Agent[] = [
     {
         name: 'test agent',
         created: new Date(),
