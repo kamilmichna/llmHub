@@ -27,8 +27,14 @@
     </div>
 </div>
 } @else {
-<div class="grid h-full gap-2 edit-agent">
-    <div class="card bg-neutral">1</div>
+<div class="p-5">
+
+    <div role="tablist" class="tabs tabs-bordered my-10">
+      <a role="tab"  class="tab font-bold">Chat</a>
+      <a role="tab"  class="tab font-bold">Model Parameters</a>
+      <a role="tab"  class="tab font-bold">RAG Filesystem Access</a>
+      <a role="tab"  class="tab font-bold">Enabled Tools</a>
+    </div>
     <div class="card bg-neutral">
         <app-chat-window class="h-full" [agent]="agent"></app-chat-window>
     </div>

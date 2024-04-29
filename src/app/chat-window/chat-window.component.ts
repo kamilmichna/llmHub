@@ -32,7 +32,75 @@ export class ChatWindowComponent {
         {
             type: "AI",
             text : "The blue whale is the biggest animal on planet earth."
-        }
+        },
+        {
+            type: "AI",
+            text: "Hello, how can i help you?"
+        },
+        {
+            type: "USER",
+            text: "What is biggest animal on planet Earth?"
+        },
+        {
+            type: "AI",
+            text : "The blue whale is the biggest animal on planet earth."
+        },
+        {
+            type: "AI",
+            text: "Hello, how can i help you?"
+        },
+        {
+            type: "USER",
+            text: "What is biggest animal on planet Earth?"
+        },
+        {
+            type: "AI",
+            text : "The blue whale is the biggest animal on planet earth."
+        },
+        {
+            type: "AI",
+            text: "Hello, how can i help you?"
+        },
+        {
+            type: "USER",
+            text: "What is biggest animal on planet Earth?"
+        },
+        {
+            type: "AI",
+            text : "The blue whale is the biggest animal on planet earth."
+        },
+        {
+            type: "USER",
+            text: "What is biggest animal on planet Earth?"
+        },
+        {
+            type: "AI",
+            text : "The blue whale is the biggest animal on planet earth."
+        },
+        {
+            type: "AI",
+            text: "Hello, how can i help you?"
+        },
+        {
+            type: "USER",
+            text: "What is biggest animal on planet Earth?"
+        },
+        {
+            type: "AI",
+            text : "The blue whale is the biggest animal on planet earth."
+        },
+        {
+            type: "AI",
+            text: "Hello, how can i help you?"
+        },
+        {
+            type: "USER",
+            text: "What is biggest animal on planet Earth?"
+        },
+        {
+            type: "AI",
+            text : "The blue whale is the biggest animal on planet earth."
+        },
     ]
     session = signal<Session | null>(null);
 

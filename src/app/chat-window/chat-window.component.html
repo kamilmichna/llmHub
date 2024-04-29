@@ -8,8 +8,8 @@
   <div class="chat-messages">
     @for (message of messages; track message) { @if( message.type === "AI")
     {
-    <div class="chat chat-start ">
-      <div class="chat-image avatar">
+    <div class="chat chat-start flex my-2">
+      <div class="chat-image avatar mr-2">
         <div class="w-10 rounded-full">
           <img alt="Tailwind CSS chat bubble component" src="https://api.dicebear.com/7.x/micah/svg?seed=Felix{{
                             agent.name
@@ -21,16 +21,16 @@
       </div>
     </div>
     } @else {
-    <div class="chat chat-end ">
+    <div class="chat chat-end flex my-2 justify-end">
+      <div class="chat-bubble bg-base-200 mr-2">
+        {{ message.text }}
+      </div>
       <div class="chat-image avatar">
         <div class="w-10 rounded-full">
           <img alt="Tailwind CSS chat bubble component" src="https://api.dicebear.com/7.x/micah/svg?seed=Felix{{
                             session()?.user?.email
                         }}" />
         </div>
-      </div>
-      <div class="chat-bubble bg-base-200 ">
-        {{ message.text }}
       </div>
     </div>
     } }
