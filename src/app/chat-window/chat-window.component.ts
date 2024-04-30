@@ -1,8 +1,10 @@
 import { Component, Input, signal } from '@angular/core';
 import { Agent } from '../agents.service';
 import { SupabaseService } from '../supabase.service';
+import { ChatService } from '../chat.service'
 import { Session } from '@supabase/supabase-js';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 // TODO move to messages service
 interface Message {
@@ -13,13 +15,13 @@ interface Message {
 @Component({
     selector: 'app-chat-window',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule,FormsModule],
     templateUrl: './chat-window.component.html',
     styleUrl: './chat-window.component.scss',
 })
 export class ChatWindowComponent {
     @Input() agent?: Agent;
-
+    chatInputMessage = ''
     messages: Message[] = [
         {
             type: "AI",
@@ -31,7 +33,7 @@ export class ChatWindowComponent {
         },
         {
             type: "AI",
-            text : "The blue whale is the biggest animal on planet earth."
+            text: "The blue whale is the biggest animal on planet earth."
         },
         {
             type: "AI",
@@ -43,7 +45,7 @@ export class ChatWindowComponent {
         },
         {
             type: "AI",
-            text : "The blue whale is the biggest animal on planet earth."
+            text: "The blue whale is the biggest animal on planet earth."
         },
         {
             type: "AI",
@@ -55,7 +57,7 @@ export class ChatWindowComponent {
         },
         {
             type: "AI",
-            text : "The blue whale is the biggest animal on planet earth."
+            text: "The blue whale is the biggest animal on planet earth."
         },
         {
             type: "AI",
@@ -67,7 +69,7 @@ export class ChatWindowComponent {
         },
         {
             type: "AI",
-            text : "The blue whale is the biggest animal on planet earth."
+            text: "The blue whale is the biggest animal on planet earth."
         },
         {
             type: "USER",
@@ -75,7 +77,7 @@ export class ChatWindowComponent {
         },
         {
             type: "AI",
-            text : "The blue whale is the biggest animal on planet earth."
+            text: "The blue whale is the biggest animal on planet earth."
         },
         {
             type: "AI",
@@ -87,7 +89,7 @@ export class ChatWindowComponent {
         },
         {
             type: "AI",
-            text : "The blue whale is the biggest animal on planet earth."
+            text: "The blue whale is the biggest animal on planet earth."
         },
         {
             type: "AI",
@@ -99,13 +101,27 @@ export class ChatWindowComponent {
         },
         {
             type: "AI",
-            text : "The blue whale is the biggest animal on planet earth."
+            text: "The blue whale is the biggest animal on planet earth."
         },
     ]
     session = signal<Session | null>(null);
 
-    constructor(private supabase: SupabaseService){}
+    constructor(private supabase: SupabaseService, private chatService: ChatService) { }
     ngOnInit() {
         this.supabase.authChanges((_, session) => (this.session.set(session)))
+        this.chatService.sendMessageToChat('hello there');
+    }
+
+    async sendMessage() {
+        if (this.chatInputMessage) {
+            const resp = await this.chatService.sendMessageToChat(this.chatInputMessage);
+            const answer = resp?.data
+            if (resp?.error || !answer) {
+                console.error("no message returned from api endpoint");
+                return;
+            }
+            alert(answer)
+            this.chatInputMessage = '';
+        } 
     }
 }

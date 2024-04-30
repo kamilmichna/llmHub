@@ -1,8 +1,8 @@
+<a routerLink="/dashboard" routerLinkActive="true">
+    <button class="btn btn-primary btn-sm m-5">Go Back</button></a
+>
 @if (isNewAgentMode()) {
 <div class="p-5">
-    <a routerLink="/dashboard" routerLinkActive="true">
-        <button class="btn btn-primary btn-sm">Go Back</button></a
-    >
     <div class="w-100 flex justify-center mt-10">
         <div class="card w-96 shadow-xl bg-base-200">
             <div class="card-body flex">
@@ -28,12 +28,11 @@
 </div>
 } @else {
 <div class="p-5">
-
     <div role="tablist" class="tabs tabs-bordered my-10">
-      <a role="tab"  class="tab font-bold">Chat</a>
-      <a role="tab"  class="tab font-bold">Model Parameters</a>
-      <a role="tab"  class="tab font-bold">RAG Filesystem Access</a>
-      <a role="tab"  class="tab font-bold">Enabled Tools</a>
+        <a role="tab" class="tab font-bold">Chat</a>
+        <a role="tab" class="tab font-bold">Model Parameters</a>
+        <a role="tab" class="tab font-bold">RAG Filesystem Access</a>
+        <a role="tab" class="tab font-bold">Enabled Tools</a>
     </div>
     <div class="card bg-neutral">
         <app-chat-window class="h-full" [agent]="agent"></app-chat-window>

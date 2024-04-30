@@ -12,6 +12,6 @@ import { Router } from '@angular/router';
 })
 export class AuthComponent {
     constructor(private supabase: SupabaseService, private router: Router) {
-        supabase.getSession().then(data => data.session ? router.navigate(['dashboard']) : null)
+        supabase.getSession().then(data => data?.session ? router.navigate(['dashboard']) : null)
     }
 }

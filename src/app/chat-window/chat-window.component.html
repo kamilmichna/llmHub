@@ -36,8 +36,8 @@
     } }
   </div>
   <div class="chat-input">
-    <input type="text" class="input" placeholder="Type your message here..." />
-    <button class="btn">Send</button>
+    <input type="text" [(ngModel)]='chatInputMessage' class="input" placeholder="Type your message here..." />
+    <button class="btn" (click)="sendMessage()">Send</button>
   </div>
 </div>
 }
