@@ -9,13 +9,13 @@ import { FormsModule } from '@angular/forms';
 // TODO move to messages service
 interface Message {
     text: string,
-    type: 'AI' | 'USER'
+    type: 'AI' | 'USER' | 'LOADING'
 }
 
 @Component({
     selector: 'app-chat-window',
     standalone: true,
-    imports: [CommonModule,FormsModule],
+    imports: [CommonModule, FormsModule],
     templateUrl: './chat-window.component.html',
     styleUrl: './chat-window.component.scss',
 })
@@ -26,82 +26,6 @@ export class ChatWindowComponent {
         {
             type: "AI",
             text: "Hello, how can i help you?"
-        },
-        {
-            type: "USER",
-            text: "What is biggest animal on planet Earth?"
-        },
-        {
-            type: "AI",
-            text: "The blue whale is the biggest animal on planet earth."
-        },
-        {
-            type: "AI",
-            text: "Hello, how can i help you?"
-        },
-        {
-            type: "USER",
-            text: "What is biggest animal on planet Earth?"
-        },
-        {
-            type: "AI",
-            text: "The blue whale is the biggest animal on planet earth."
-        },
-        {
-            type: "AI",
-            text: "Hello, how can i help you?"
-        },
-        {
-            type: "USER",
-            text: "What is biggest animal on planet Earth?"
-        },
-        {
-            type: "AI",
-            text: "The blue whale is the biggest animal on planet earth."
-        },
-        {
-            type: "AI",
-            text: "Hello, how can i help you?"
-        },
-        {
-            type: "USER",
-            text: "What is biggest animal on planet Earth?"
-        },
-        {
-            type: "AI",
-            text: "The blue whale is the biggest animal on planet earth."
-        },
-        {
-            type: "USER",
-            text: "What is biggest animal on planet Earth?"
-        },
-        {
-            type: "AI",
-            text: "The blue whale is the biggest animal on planet earth."
-        },
-        {
-            type: "AI",
-            text: "Hello, how can i help you?"
-        },
-        {
-            type: "USER",
-            text: "What is biggest animal on planet Earth?"
-        },
-        {
-            type: "AI",
-            text: "The blue whale is the biggest animal on planet earth."
-        },
-        {
-            type: "AI",
-            text: "Hello, how can i help you?"
-        },
-        {
-            type: "USER",
-            text: "What is biggest animal on planet Earth?"
-        },
-        {
-            type: "AI",
-            text: "The blue whale is the biggest animal on planet earth."
         },
     ]
     session = signal<Session | null>(null);
@@ -114,14 +38,34 @@ export class ChatWindowComponent {
 
     async sendMessage() {
         if (this.chatInputMessage) {
+            this.messages.push({
+                type: "USER",
+                text: this.chatInputMessage
+            });
+            this.messages.push({
+                type: "LOADING",
+                text: ""
+            });
             const resp = await this.chatService.sendMessageToChat(this.chatInputMessage);
             const answer = resp?.data
             if (resp?.error || !answer) {
                 console.error("no message returned from api endpoint");
+                this.messages.push({
+                    type: "AI",
+                    text: "Sorry, I can`t currently respons to Your message. Please try again later"
+                })
                 return;
             }
-            alert(answer)
+            this.messages.pop();
+            this.messages.push({
+                type: "AI",
+                text: answer
+            });
             this.chatInputMessage = '';
-        } 
+        }
+    }
+
+    clearChat() {
+        this.messages = [];
     }
 }

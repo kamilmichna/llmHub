@@ -29,13 +29,19 @@
 } @else {
 <div class="p-5">
     <div role="tablist" class="tabs tabs-bordered my-10">
-        <a role="tab" class="tab font-bold">Chat</a>
-        <a role="tab" class="tab font-bold">Model Parameters</a>
-        <a role="tab" class="tab font-bold">RAG Filesystem Access</a>
-        <a role="tab" class="tab font-bold">Enabled Tools</a>
+        <a role="tab" class="tab font-bold" (click)="changeTab('chat')" [class.tab-active]="activeTab() === 'chat'">Chat</a>
+        <a role="tab" class="tab font-bold" (click)="changeTab('params')" [class.tab-active]="activeTab() === 'params'">Model Parameters</a>
+        <a role="tab" class="tab font-bold" (click)="changeTab('rag')" [class.tab-active]="activeTab() === 'rag'">RAG Filesystem Access</a>
+        <a role="tab" class="tab font-bold" (click)="changeTab('tools')" [class.tab-active]="activeTab() === 'tools'">Enabled Tools</a>
     </div>
     <div class="card bg-neutral">
-        <app-chat-window class="h-full" [agent]="agent"></app-chat-window>
+        @switch (activeTab()) {
+            @case ("chat") {
+                <app-chat-window class="h-full" [agent]="agent"></app-chat-window>
+            } @case ("tools") {
+                <app-tools></app-tools>
+            }
+        }
     </div>
 </div>
 }

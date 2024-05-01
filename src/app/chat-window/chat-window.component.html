@@ -2,8 +2,7 @@
 <div class="chat-window h-full shadow-md p-4 rounded-md">
   <div class="chat-header flex justify-between items-center">
     <div class="chat-title font-bold text-lg">Chat Room</div>
-    <!-- TODO - clear chat functionality -->
-    <button class="btn btn-ghost btn-sm">Clear chat</button>
+    <button class="btn btn-ghost btn-sm" (click)="clearChat()">Clear chat</button>
   </div>
   <div class="chat-messages">
     @for (message of messages; track message) { @if( message.type === "AI")
@@ -20,7 +19,7 @@
         {{ message.text }}
       </div>
     </div>
-    } @else {
+    } @else if (message.type === 'USER') {
     <div class="chat chat-end flex my-2 justify-end">
       <div class="chat-bubble bg-base-200 mr-2">
         {{ message.text }}
@@ -33,7 +32,21 @@
         </div>
       </div>
     </div>
-    } }
+    } @else if (message.type === 'LOADING'){
+      <div class="chat chat-start flex my-2">
+        <div class="chat-image avatar mr-2">
+          <div class="w-10 rounded-full">
+            <img alt="Tailwind CSS chat bubble component" src="https://api.dicebear.com/7.x/micah/svg?seed=Felix{{
+                              agent.name
+                          }}" />
+          </div>
+        </div>
+        <div class="chat-bubble bg-base-200">
+            Loading... 
+        </div>
+      </div>
+    }
+   }
   </div>
   <div class="chat-input">
     <input type="text" [(ngModel)]='chatInputMessage' class="input" placeholder="Type your message here..." />
