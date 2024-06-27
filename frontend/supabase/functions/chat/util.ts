@@ -2,7 +2,7 @@ const { GROQ_KEY } = Deno.env.toObject();
 import { ChatGroq } from "npm:@langchain/groq";
 import { AgentExecutor, createStructuredChatAgent } from "npm:langchain/agents";
 import { WikipediaQueryRun } from "npm:@langchain/community/tools/wikipedia_query_run";
-import { prompt } from './prompt.ts'
+import { prompt } from './prompt'
 import { StructuredToolInterface } from "npm:@langchain/core/tools";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 export const createAgent = async () => {

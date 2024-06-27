@@ -1,5 +1,5 @@
-import { corsHeaders } from "../cors.ts";
-import { createAgent, getUserData } from "./util.ts";
+import { corsHeaders } from "../cors";
+import { createAgent, getUserData } from "./util";
 
 Deno.serve(async (req) => {
     const { method } = req;
