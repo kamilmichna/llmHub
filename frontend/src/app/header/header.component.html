@@ -1,26 +1,24 @@
 <div class="navbar bg-base-200">
-  <div class="flex-1">
-    <a class="btn btn-ghost text-xl" routerLink="/">LLMHub</a>
-  </div>
-  @if (session()) {
-    <div class="flex-none gap-2">
-      @if (session()?.user?.email) {
-        <h2>{{session()?.user?.email}}</h2>
-      }
-      <div class="dropdown dropdown-end">
-        <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
-          <div class="w-10 rounded-full">
-            <img alt="Tailwind CSS Navbar component" src="https://api.dicebear.com/7.x/micah/svg?seed=Felix{{
-            session()?.user?.email
-          }}" />
-          </div>
-        </div>
-        <ul tabindex="0" class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-200 rounded-box w-52">
-          <li><button (click)="signOut()">Logout</button></li>
-        </ul>
-      </div>
+    <div class="flex-1">
+        <a class="btn btn-ghost text-xl" routerLink="/">LLMHub</a>
     </div>
-  } @else {
-    <a routerLink="/auth" routerLinkActive="active"  class="btn btn-primary btn-sm">Sign In</a>
-  }
+    @if (isAuthorized$ | async) {
+    <div class="flex-none gap-2">
+        <!-- @if (session()?.user?.email) {
+        <h2>{{session()?.user?.email}}</h2>
+      } -->
+        <div class="dropdown dropdown-end">
+            <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+                <div class="w-10 rounded-full">
+                    <img alt="Tailwind CSS Navbar component" src="https://api.dicebear.com/7.x/micah/svg?seed=Felix" />
+                </div>
+            </div>
+            <ul tabindex="0" class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-200 rounded-box w-52">
+                <li><button (click)="signOut()">Logout</button></li>
+            </ul>
+        </div>
+    </div>
+    } @else {
+    <button (click)="signIn()" class="btn btn-primary btn-sm">Sign In</button>
+    }
 </div>

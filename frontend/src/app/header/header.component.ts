@@ -1,26 +1,30 @@
 import { Component, signal } from '@angular/core';
-import { SupabaseService } from '../supabase.service';
-import { Session } from '@supabase/supabase-js';
-import { JsonPipe } from '@angular/common';
+import { AsyncPipe, JsonPipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
-
+import { environment } from '../../environments/environment';
+import { AuthService } from '../auth.service';
 @Component({
-  selector: 'app-header',
-  standalone: true,
-  imports: [JsonPipe, RouterModule],
-  templateUrl: './header.component.html',
-  styleUrl: './header.component.scss'
+    selector: 'app-header',
+    standalone: true,
+    imports: [JsonPipe, RouterModule, AsyncPipe],
+    templateUrl: './header.component.html',
+    styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
-    session = signal<Session | null>(null);
-    constructor(private supabase: SupabaseService) {
+    apiUrl;
+    isAuthorized$: any;
+    constructor(private auth: AuthService) {
+        this.apiUrl = environment.apiUrl;
+        this.isAuthorized$ = auth.checkLoggedIn$;
     }
-   
-    ngOnInit() {
-      this.supabase.authChanges((_, session) => (this.session.set(session)))
-    }   
 
-    signOut() {
-      this.supabase.signOut();
+    ngOnInit() {}
+
+    async signOut() {
+        await this.auth.signOut();
+    }
+
+    async signIn() {
+        await this.auth.signIn();
     }
 }
