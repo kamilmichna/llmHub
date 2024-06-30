@@ -7,22 +7,22 @@ import { AgentDetailsComponent } from './agent-details/agent-details.component';
 export const routes: Routes = [
     {
         path: '',
-        component: LandingPageComponent
+        component: LandingPageComponent,
     },
     {
         path: 'dashboard',
         component: DashboardPageComponent,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
     },
     {
         path: 'agents',
         component: AgentDetailsComponent,
         pathMatch: 'full',
-        canActivate: [authGuard]
+        canActivate: [authGuard],
     },
     {
         path: 'agents/:agentId',
         component: AgentDetailsComponent,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
     },
 ];

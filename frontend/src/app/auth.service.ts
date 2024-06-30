@@ -18,8 +18,7 @@ import {
     startWith,
     switchMap,
 } from 'rxjs';
-
-type HTTP_METHODS = 'GET' | 'POST' | 'PATCH' | 'DELETE' | 'PUT';
+import { Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root',
@@ -45,7 +44,7 @@ export class AuthService {
         shareReplay()
     );
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, private router: Router) {
         this.refreshAuthStatus.next(true);
     }
 
@@ -57,7 +56,10 @@ export class AuthService {
                 error: (error: any) => {
                     console.error('Logout failed', error);
                 },
-                complete: () => this.refreshAuthStatus.next(true),
+                complete: () => {
+                    this.refreshAuthStatus.next(true);
+                    this.router.navigate(['/']);
+                },
             });
     }
 
