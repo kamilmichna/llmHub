@@ -1,16 +1,15 @@
 <div>
-  <div class="card-body">
-    <div class="flex justify-between my-2">
-      <h2 class="card-title mb-2">Manage your AI Agents</h2>
-      <a routerLink="/agents" routerLinkActive="true">
-        <button class="btn btn-primary btn-sm">Create new</button>
-      </a>
+    <div class="card-body">
+        <div class="flex justify-between my-2">
+            <h2 class="card-title mb-2">Your AI Agents</h2>
+            <a routerLink="/agents" routerLinkActive="true">
+                <button class="btn btn-primary btn-sm">Create new</button>
+            </a>
+        </div>
+        <div class="agents-grid">
+            @if (agents$ | async; as agents) { @for (agent of agents; track agent) {
+            <app-agent-details-accordion [agent]="agent"></app-agent-details-accordion>
+            } }
+        </div>
     </div>
-    @if (agents$ | async; as agents) { 
-      <!-- <p>{{agents}}</p> -->
-      <!-- @for (agent of agents; track agent) {
-        <app-agent-details-accordion [agent]="agent"></app-agent-details-accordion>
-      }  -->
-    }
-  </div>
 </div>

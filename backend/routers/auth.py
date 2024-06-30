@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Response
+from fastapi import APIRouter, Depends, Response, HTTPException
 from authlib.integrations.starlette_client import OAuth, OAuthError
 from fastapi.responses import HTMLResponse, RedirectResponse
 from starlette.config import Config
@@ -15,6 +15,10 @@ oauth.register(
     }
 )
 
+def get_current_user(request: Request):
+    if ("user" in request.session): return request.session.get('user')
+    else: raise HTTPException(status_code=401)
+
 @router.get("/login", tags=["auth"])
 async def login(request: Request):
     redirect_uri = request.url_for('auth')
@@ -29,16 +33,14 @@ async def auth(request: Request):
         return HTMLResponse(f'<h1>{error.error}</h1>')
     user = token.get('userinfo')
     if user:
-        print("SET USER")
         request.session['user'] = dict(user)
     return RedirectResponse(url=config('FRONTEND_URL'))
 
-@router.get('/logout')
+@router.get('/logout', dependencies=[Depends(get_current_user)])
 async def logout(request: Request):
     request.session.clear()
     return {'message': 'Logged Out'}
 
 @router.get("/check-auth")
 async def logout(request: Request):
-    print(request.session.get('user'))
     return "user" in request.session
