@@ -3,7 +3,10 @@ from authlib.integrations.starlette_client import OAuth, OAuthError
 from fastapi.responses import HTMLResponse, RedirectResponse
 from starlette.config import Config
 from starlette.requests import Request
-
+from sqlalchemy.orm import Session
+from backend.database import get_db
+from backend.orm.user_orm import create_user, get_user
+from backend.schemas.user import UserCreate
 config = Config('.env')  # read config from .env file
 router = APIRouter()
 oauth = OAuth(config)
@@ -26,15 +29,18 @@ async def login(request: Request):
     return await oauth.google.authorize_redirect(request, redirect_uri)
 
 @router.get('/auth',tags=['auth'])
-async def auth(request: Request):
+async def auth(request: Request, db: Session = Depends(get_db)):
     try:
         token = await oauth.google.authorize_access_token(request)
     except OAuthError as error:
         return HTMLResponse(f'<h1>{error.error}</h1>')
     user = token.get('userinfo')
     if user:
+        userData = get_user(db, user.email)
+        if userData is None:
+            create_user(db, UserCreate(email=user.email))
         request.session['user'] = dict(user)
-    return RedirectResponse(url=config('FRONTEND_URL'))
+    # return RedirectResponse(url=config('FRONTEND_URL'))
 
 @router.get('/logout', dependencies=[Depends(get_current_user)])
 async def logout(request: Request):
