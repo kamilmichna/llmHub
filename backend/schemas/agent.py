@@ -5,9 +5,9 @@ from backend.models.agent import PROVIDERS_ENUM
 PROVIDERS = Literal['OPENAI', 'GROQ']
 
 class AgentBase(BaseModel):
+    id: int
     name: str
     provider: PROVIDERS
-    system_message: Optional[str] = None
 
 class AgentCreate(AgentBase):
     name: str
@@ -18,4 +18,4 @@ class Agent(AgentBase):
     provider: PROVIDERS
     system_message: Optional[str] = None
     class Config:
-        orm_mode = True
+        from_attributes = True
