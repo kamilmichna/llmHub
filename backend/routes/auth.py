@@ -44,7 +44,8 @@ async def auth(request: Request, db: Session = Depends(get_db)):
         if userData is None:
             create_user(db, UserCreate(email=user.email))
         request.session['user'] = dict(user)
-    # return RedirectResponse(url=config('FRONTEND_URL'))
+    return RedirectResponse(url=config('FRONTEND_URL'))
+
 
 @router.get('/logout', dependencies=[Depends(get_current_user)])
 async def logout(request: Request):

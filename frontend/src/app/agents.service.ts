@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../environments/environment';
 
 export interface Agent {
     name: string;
@@ -32,9 +34,17 @@ export const agentsMock: Agent[] = [
     providedIn: 'root',
 })
 export class AgentsService {
-    constructor() {}
+    apiUrl = environment.apiUrl;
+    constructor(private http: HttpClient) {}
 
     getAgents(): Observable<Agent[]> {
         return of(agentsMock);
+    }
+
+    createAgent() {
+        this.http.post(`${this.apiUrl}/agents`, {
+            name: 'test from frontend',
+            provider: 'OpenAi',
+        });
     }
 }

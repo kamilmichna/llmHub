@@ -1,14 +1,18 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '../environments/environment';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ChatService {
-    constructor(
-    ) {
-    }
+    apiUrl = environment.apiUrl;
 
-    async sendMessageToChat(message: string) {
-      
+    constructor(private http: HttpClient) {}
+
+    async sendMessageToChat(message: string, agentName: string) {
+        return this.http.post(`${this.apiUrl}/agents/${agentName}`, {
+            message,
+        });
     }
 }

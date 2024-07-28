@@ -21,24 +21,8 @@
 </div>
 } @else {
 <div class="p-5 py-0">
-    <div role="tablist" class="tabs tabs-bordered my-10">
-        <a role="tab" class="tab font-bold" (click)="changeTab('chat')"
-            [class.tab-active]="activeTab() === 'chat'">Chat</a>
-        <a role="tab" class="tab font-bold" (click)="changeTab('params')"
-            [class.tab-active]="activeTab() === 'params'">Model Parameters</a>
-        <a role="tab" class="tab font-bold" (click)="changeTab('rag')" [class.tab-active]="activeTab() === 'rag'">RAG
-            Filesystem Access</a>
-        <a role="tab" class="tab font-bold" (click)="changeTab('tools')"
-            [class.tab-active]="activeTab() === 'tools'">Enabled Tools</a>
-    </div>
     <div class="card bg-neutral my-0">
-        @switch (activeTab()) {
-        @case ("chat") {
         <app-chat-window class="h-full" [agent]="agent"></app-chat-window>
-        } @case ("tools") {
-        <app-tools></app-tools>
-        }
-        }
     </div>
 </div>
 }
