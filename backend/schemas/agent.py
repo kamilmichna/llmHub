@@ -13,6 +13,9 @@ class AgentCreate(AgentBase):
     name: str
     provider: PROVIDERS
 
+class AgentInvoke(BaseModel):
+    message: str
+
 class Agent(AgentBase):
     name: str
     provider: PROVIDERS
