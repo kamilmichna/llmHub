@@ -1,8 +1,8 @@
 import { Component, signal } from '@angular/core';
 import { AsyncPipe, JsonPipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { environment } from '../../environments/environment';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../../auth.service';
+import { environment } from '../../../environments/environment';
 @Component({
     selector: 'app-header',
     standalone: true,

@@ -3,30 +3,25 @@ import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../environments/environment';
 
+export enum PROVIDERS {
+    OpenAi,
+    Groq,
+}
+
 export interface Agent {
+    id?: number;
     name: string;
-    created: Date;
     model: string;
-    systemMessage?: string;
+    provider: PROVIDERS;
+    created: Date;
 }
 
 export const agentsMock: Agent[] = [
     {
-        name: 'test agent',
-        created: new Date(),
+        name: 'SYSTEM MESS2',
         model: 'gpt-4',
-    },
-    {
-        name: 'new agent',
+        provider: PROVIDERS.OpenAi,
         created: new Date(),
-        model: 'gpt-4',
-    },
-    {
-        name: 'agent',
-        created: new Date(),
-        model: 'gpt-4',
-        systemMessage: `You are a helpfull shopping assistant
-      Always help user with making good shopping decisions`,
     },
 ];
 
@@ -38,13 +33,26 @@ export class AgentsService {
     constructor(private http: HttpClient) {}
 
     getAgents(): Observable<Agent[]> {
-        return of(agentsMock);
+        return this.http.get<Agent[]>(`${this.apiUrl}/agents`, {
+            withCredentials: true,
+        });
     }
 
-    createAgent() {
-        this.http.post(`${this.apiUrl}/agents`, {
-            name: 'test from frontend',
-            provider: 'OpenAi',
+    getAgentByName(agentName: string): Observable<Agent> {
+        return this.http.get<Agent>(`${this.apiUrl}/agents/${agentName}`, {
+            withCredentials: true,
         });
+    }
+
+    createAgent({ name, provider }: Record<string, string | null>) {
+        return this.http.post(
+            `${this.apiUrl}/agents`,
+            {
+                name: name,
+                provider: provider,
+                system_message: 'Your name is John',
+            },
+            { withCredentials: true }
+        );
     }
 }

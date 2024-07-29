@@ -1,9 +1,9 @@
 from backend.database import Base
-from sqlalchemy import Boolean, Column, Enum, ForeignKey, Integer, String
+from sqlalchemy import Boolean, Column, DateTime, Enum, ForeignKey, Integer, String, func
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import relationship
 
-PROVIDERS_ENUM = {"OPENAI", "GROQ"}
+PROVIDERS_ENUM = {"OpenAI", "Groq"}
 
 class Agent(Base): 
     __tablename__ = 'agents'
@@ -13,3 +13,4 @@ class Agent(Base):
     system_message = Column(String, nullable=True)
     owner_id = Column(Integer, ForeignKey("users.id"))
     owner = relationship("User", back_populates="agents")
+    created = Column(DateTime(timezone=True), server_default=func.now())

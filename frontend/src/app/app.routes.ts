@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
-import { LandingPageComponent } from './landing-page/landing-page.component';
-import { DashboardPageComponent } from './dashboard-page/dashboard-page.component';
-import { authGuard } from './auth.guard';
 import { AgentDetailsComponent } from './agent-details/agent-details.component';
+import { authGuard } from './auth.guard';
+import { DashboardPageComponent } from './components/dashboard-page/dashboard-page.component';
+import { LandingPageComponent } from './components/landing-page/landing-page.component';
 
 export const routes: Routes = [
     {
@@ -21,7 +21,7 @@ export const routes: Routes = [
         canActivate: [authGuard],
     },
     {
-        path: 'agents/:agentId',
+        path: 'agents/:agentName',
         component: AgentDetailsComponent,
         canActivate: [authGuard],
     },

@@ -1,17 +1,20 @@
 from pydantic import BaseModel
 from typing import Optional, Literal
+from datetime import datetime
 from backend.models.agent import PROVIDERS_ENUM
 
-PROVIDERS = Literal['OPENAI', 'GROQ']
+PROVIDERS = Literal['OpenAI', 'Groq']
 
 class AgentBase(BaseModel):
     id: int
     name: str
     provider: PROVIDERS
+    created: datetime
 
-class AgentCreate(AgentBase):
+class AgentCreate(BaseModel):
     name: str
     provider: PROVIDERS
+    system_message: Optional[str] = None
 
 class AgentInvoke(BaseModel):
     message: str

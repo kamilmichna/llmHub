@@ -1,0 +1,8 @@
+@if (currentNotification) {
+<div class="alerts-container">
+    <div role="alert" class="alert"
+        [ngClass]="{'alert-info': currentNotification.type === 'INFO', 'alert-error': currentNotification.type === 'ERROR', 'alert-success': currentNotification.type === 'SUCCESS' }">
+        <span>{{currentNotification.message}}</span>
+    </div>
+</div>
+}

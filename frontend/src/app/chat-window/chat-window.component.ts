@@ -41,27 +41,27 @@ export class ChatWindowComponent {
                 type: 'LOADING',
                 text: '',
             });
-            (
-                await this.chatService.sendMessageToChat(
-                    this.chatInputMessage,
-                    this.agent.name
-                )
-            ).subscribe({
-                next: (resp) => {
-                    this.messages.pop();
-                    this.messages.push({
-                        type: 'AI',
-                        text: resp as string,
-                    });
-                },
-                error: () => {
-                    this.messages.pop();
-                    this.messages.push({
-                        type: 'AI',
-                        text: 'There was an error with response from llm model',
-                    });
-                },
-            });
+            await this.chatService
+                .sendMessageToChat(this.chatInputMessage, this.agent.name)
+                .subscribe({
+                    next: (resp) => {
+                        this.messages.pop();
+                        this.messages.push({
+                            type: 'AI',
+                            text: resp as string,
+                        });
+                    },
+                    error: () => {
+                        this.messages.pop();
+                        this.messages.push({
+                            type: 'AI',
+                            text: 'There was an error with response from llm model',
+                        });
+                    },
+                    complete: () => {
+                        this.chatInputMessage = '';
+                    },
+                });
         }
     }
 

@@ -10,9 +10,13 @@ export class ChatService {
 
     constructor(private http: HttpClient) {}
 
-    async sendMessageToChat(message: string, agentName: string) {
-        return this.http.post(`${this.apiUrl}/agents/${agentName}`, {
-            message,
-        });
+    sendMessageToChat(message: string, agentName: string) {
+        return this.http.post(
+            `${this.apiUrl}/agents/${agentName}`,
+            {
+                message,
+            },
+            { withCredentials: true }
+        );
     }
 }
