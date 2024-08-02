@@ -1,7 +1,7 @@
 
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, status
 from backend.database import get_db
-from backend.orm.agent_orm import create_agent, get_agent_by_name, get_agents
+from backend.orm.agent_orm import create_agent, delete_agent_by_name, get_agent_by_name, get_agents
 from backend.routes.auth import get_current_user
 from backend.schemas.agent import AgentBase, AgentCreate, Agent, AgentInvoke
 from sqlalchemy.orm import Session
@@ -41,7 +41,16 @@ def get_agent_details(agent_name, db: Session = Depends(get_db), user_id = Depen
     except Exception as e:
         db.rollback()
         print(e)
-        raise HTTPException(status_code=400, detail="Cannot get agents list")
+        raise HTTPException(status_code=400, detail="Cannot get agent details")
+    
+@router.delete("/agents/{agent_name}", tags=["agents"], status_code=status.HTTP_200_OK)
+def get_agent_details(agent_name, db: Session = Depends(get_db), user_id = Depends(get_current_user)):
+    try:
+        delete_agent_by_name(db, agent_name, user_id)
+    except Exception as e:
+        db.rollback()
+        print(e)
+        raise HTTPException(status_code=400, detail="Cannot delete agent")
     
 @router.post("/agents/{agent_name}", tags=["agents"])
 def agent_on_message(agent_name, payload: AgentInvoke, db: Session = Depends(get_db), user_id = Depends(get_current_user)):

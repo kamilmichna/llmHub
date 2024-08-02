@@ -44,13 +44,23 @@ export class AgentsService {
         });
     }
 
-    createAgent({ name, provider }: Record<string, string | null>) {
+    deleteAgent(agentName: string): Observable<Agent> {
+        return this.http.delete<Agent>(`${this.apiUrl}/agents/${agentName}`, {
+            withCredentials: true,
+        });
+    }
+
+    createAgent({
+        name,
+        provider,
+        systemMessage,
+    }: Record<string, string | null>) {
         return this.http.post(
             `${this.apiUrl}/agents`,
             {
                 name: name,
                 provider: provider,
-                system_message: 'Your name is John',
+                system_message: systemMessage,
             },
             { withCredentials: true }
         );

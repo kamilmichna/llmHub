@@ -1,6 +1,5 @@
 from backend.database import Base
-from sqlalchemy import Boolean, Column, DateTime, Enum, ForeignKey, Integer, String, func
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, DateTime, Enum, ForeignKey, Integer, String, func
 from sqlalchemy.orm import relationship
 
 PROVIDERS_ENUM = {"OpenAI", "Groq"}

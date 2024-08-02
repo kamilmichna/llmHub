@@ -29,6 +29,7 @@ export class AgentDetailsComponent {
         name: '',
         provider: '',
         model: '',
+        systemMessage: '',
     });
 
     constructor(

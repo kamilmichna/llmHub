@@ -23,7 +23,8 @@
                 </div>
                 <div>
                     <label>System Message (not required)</label>
-                    <textarea class="textarea textarea-bordered textarea-md w-full"></textarea>
+                    <textarea class="textarea textarea-bordered textarea-md w-full"
+                        formControlName="systemMessage"></textarea>
                 </div>
                 <button class="btn btn-primary" (click)="createAgent()" [disabled]="agentForm.invalid">
                     Submit

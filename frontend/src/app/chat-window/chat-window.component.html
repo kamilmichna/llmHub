@@ -2,7 +2,10 @@
 <div class="chat-window h-full shadow-md p-4 rounded-md">
   <div class="chat-header flex justify-between items-center">
     <div class="chat-title font-bold text-lg">Chat Room</div>
-    <button class="btn btn-ghost btn-sm" (click)="clearChat()">Clear chat</button>
+    <div>
+      <button class="btn btn-ghost btn-sm" (click)="clearChat()">Clear chat</button>
+      <button class="btn btn-danger btn-sm" (click)="deleteAgent()">Delete agent</button>
+    </div>
   </div>
   <div class="chat-messages">
     @for (message of messages; track message) { @if( message.type === "AI")

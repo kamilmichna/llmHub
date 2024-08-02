@@ -1,5 +1,5 @@
 from backend.database import Base
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 class User(Base): 
     __tablename__ = 'users'
@@ -7,3 +7,4 @@ class User(Base):
     email = Column(String, unique=True)
 
     agents = relationship("Agent", back_populates="owner")
+    api_keys = relationship("ApiKey", back_populates="owner")

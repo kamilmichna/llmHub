@@ -1,10 +1,12 @@
 import { Component, Input, signal } from '@angular/core';
-import { Agent } from '../agents.service';
+import { Agent, AgentsService } from '../agents.service';
 import { ChatService } from '../chat.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import Swal from 'sweetalert2';
+import { NotificationsService } from '../alerts.service';
+import { Router } from '@angular/router';
 
-// TODO move to messages service
 interface Message {
     text: string;
     type: 'AI' | 'USER' | 'LOADING';
@@ -27,7 +29,12 @@ export class ChatWindowComponent {
         },
     ];
 
-    constructor(private chatService: ChatService) {}
+    constructor(
+        private chatService: ChatService,
+        private agentsService: AgentsService,
+        private notificationsService: NotificationsService,
+        private router: Router
+    ) {}
     ngOnInit() {}
 
     async sendMessage() {
@@ -67,5 +74,24 @@ export class ChatWindowComponent {
 
     clearChat() {
         this.messages = [];
+    }
+
+    async deleteAgent() {
+        if (!this.agent?.name) return;
+        const result = await Swal.fire({
+            title: 'Delete Agent',
+            text: 'Are you sure that you want to delete this agent?',
+            icon: 'error',
+            confirmButtonText: 'Confirm',
+        });
+
+        if (!result.isConfirmed) return;
+        this.agentsService.deleteAgent(this.agent.name).subscribe(() => {
+            this.notificationsService.emitNotification({
+                type: 'SUCCESS',
+                message: 'Agent was deleted',
+            });
+            this.router.navigate(['/dashboard']);
+        });
     }
 }
