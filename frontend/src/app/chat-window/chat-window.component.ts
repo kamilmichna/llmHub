@@ -79,6 +79,8 @@ export class ChatWindowComponent {
     async deleteAgent() {
         if (!this.agent?.name) return;
         const result = await Swal.fire({
+            background: '#2a323c',
+            color: '#a6adbb',
             title: 'Delete Agent',
             text: 'Are you sure that you want to delete this agent?',
             icon: 'error',
