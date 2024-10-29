@@ -14,16 +14,8 @@ export interface Agent {
     model: string;
     provider: PROVIDERS;
     created: Date;
+    system_message: string;
 }
-
-export const agentsMock: Agent[] = [
-    {
-        name: 'SYSTEM MESS2',
-        model: 'gpt-4',
-        provider: PROVIDERS.OpenAi,
-        created: new Date(),
-    },
-];
 
 @Injectable({
     providedIn: 'root',
@@ -67,8 +59,16 @@ export class AgentsService {
     }
 
     getApiKeys() {
-        return this.http.get<Agent[]>(`${this.apiUrl}/api-keys`, {
+        return this.http.get<any>(`${this.apiUrl}/api-keys`, {
             withCredentials: true,
         });
+    }
+
+    addApiKey(agentName: string, apiKey: string): Observable<any> {
+        return this.http.post(
+            `${this.apiUrl}/api-keys`,
+            { api_key: apiKey },
+            { withCredentials: true }
+        );
     }
 }

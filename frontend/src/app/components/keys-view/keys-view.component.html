@@ -1,22 +1,26 @@
-<ng-container>
+<div>
+    @if (apiKeys$ | async; as apiKeys) {
     <div class="overflow-x-auto">
         <table class="table w-full">
             <thead>
                 <tr>
                     <th>Provider</th>
-                    <th>API Key</th>
+                    <th>Name</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let data of apiData; let i = index">
-                    <td>{{ data.provider }}</td>
-                    <td>{{ data.apiKey }}</td>
+                @for (key of apiKeys; track key.id) {
+                <tr>
+                    <td>{{ key.provider }}</td>
+                    <td>{{ key.alias }}</td>
                     <td>
-                        <button class="btn btn-error btn-sm" (click)="deleteRow(i)">Delete</button>
+                        <button class="btn btn-error btn-sm" (click)="deleteRow()">Delete</button>
                     </td>
                 </tr>
+                }
             </tbody>
         </table>
     </div>
-</ng-container>
+    }
+</div>

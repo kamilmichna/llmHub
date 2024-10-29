@@ -23,7 +23,7 @@ def get_current_user(request: Request, db: Session = Depends(get_db)):
         user_data = request.session.get('user')
         user_email = user_data['email']
         user_db_data = get_user(db, user_email)
-        return user_db_data.id
+        return getattr(user_db_data,'id', None)
     else: raise HTTPException(status_code=401)
 
 @router.get("/login", tags=["auth"])

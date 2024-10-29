@@ -4,7 +4,7 @@ from requests import Session
 from backend.database import get_db
 from backend.routes.auth import get_current_user
 from backend.schemas.api_keys import ApiKey, ApiKeyBase, ApiKeyCreate
-from backend.orm.api_keys import create_api_key
+from backend.orm.api_keys import create_api_key, get_api_keys
 
 
 router = APIRouter()
@@ -19,6 +19,11 @@ async def create(model: ApiKeyCreate, db: Session = Depends(get_db), user_id = D
         print(e)
         raise HTTPException(status_code=400, detail="Cannot create api key!")
 
-@router.get("/api-keys", tags=["agents"])
+@router.get("/api-keys", tags=["api_keys"],  response_model=list[ApiKeyBase])
 async def getApiKeys(db: Session = Depends(get_db), user_id = Depends(get_current_user)):
-    return
+    try:
+        api_keys = get_api_keys(db, user_id)
+        return api_keys
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=400, detail="Cannot get api keys!")

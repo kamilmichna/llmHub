@@ -10,3 +10,7 @@ def create_api_key(db: Session, api_key: ApiKeyCreate, user_id: int):
     db.commit()
     db.refresh(api_key_obj)
     return api_key_obj
+
+
+def get_api_keys(db: Session, user_id: int):
+    return db.query(ApiKeyModel).filter(ApiKeyModel.owner_id == user_id).all()

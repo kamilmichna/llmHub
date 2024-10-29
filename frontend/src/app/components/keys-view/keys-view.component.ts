@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import Swal from 'sweetalert2';
 import { AgentsService } from '../../agents.service';
+import { AsyncPipe, CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-keys-view',
     standalone: true,
-    imports: [],
+    imports: [AsyncPipe],
     templateUrl: './keys-view.component.html',
     styleUrl: './keys-view.component.scss',
 })
@@ -13,7 +14,7 @@ export class KeysViewComponent {
     apiKeys$ = this.agentsService.getApiKeys();
     constructor(private agentsService: AgentsService) {}
 
-    deleteRow(_t11: any) {
+    deleteRow() {
         throw new Error('Method not implemented.');
     }
 
@@ -30,6 +31,4 @@ export class KeysViewComponent {
             confirmButtonText: 'Confirm',
         });
     }
-
-
 }
