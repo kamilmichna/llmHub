@@ -65,4 +65,10 @@ export class AgentsService {
             { withCredentials: true }
         );
     }
+
+    getApiKeys() {
+        return this.http.get<Agent[]>(`${this.apiUrl}/api-keys`, {
+            withCredentials: true,
+        });
+    }
 }

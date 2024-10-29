@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import Swal from 'sweetalert2';
+import { AgentsService } from '../../agents.service';
 
 @Component({
     selector: 'app-keys-view',
@@ -9,6 +10,13 @@ import Swal from 'sweetalert2';
     styleUrl: './keys-view.component.scss',
 })
 export class KeysViewComponent {
+    apiKeys$ = this.agentsService.getApiKeys();
+    constructor(private agentsService: AgentsService) {}
+
+    deleteRow(_t11: any) {
+        throw new Error('Method not implemented.');
+    }
+
     async openProviderModal() {
         await Swal.fire({
             background: '#2a323c',
@@ -22,4 +30,6 @@ export class KeysViewComponent {
             confirmButtonText: 'Confirm',
         });
     }
+
+
 }

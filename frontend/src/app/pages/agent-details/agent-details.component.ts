@@ -1,11 +1,11 @@
 import { Component, signal } from '@angular/core';
+import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { ChatWindowComponent } from '../chat-window/chat-window.component';
-import { Agent, agentsMock, AgentsService } from '../agents.service';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { DashboardLayoutComponent } from '../components/dashboard-layout/dashboard-layout.component';
-import { NotificationsService } from '../alerts.service';
 import { finalize, lastValueFrom } from 'rxjs';
+import { Agent, AgentsService } from '../../agents.service';
+import { NotificationsService } from '../../alerts.service';
+import { ChatWindowComponent } from '../../components/chat-window/chat-window.component';
+import { DashboardLayoutComponent } from '../../components/dashboard-layout/dashboard-layout.component';
 
 @Component({
     selector: 'app-agent-details',

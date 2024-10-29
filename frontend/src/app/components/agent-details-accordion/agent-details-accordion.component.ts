@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Agent } from '../agents.service';
 import { DatePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ChatWindowComponent } from '../chat-window/chat-window.component';
-import { FileTreeComponent } from '../components/file-tree/file-tree.component';
+import { Agent } from '../../agents.service';
+import { FileTreeComponent } from '../file-tree/file-tree.component';
 @Component({
     selector: 'app-agent-details-accordion',
     standalone: true,

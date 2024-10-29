@@ -1,11 +1,11 @@
 import { Component, Input, signal } from '@angular/core';
-import { Agent, AgentsService } from '../agents.service';
-import { ChatService } from '../chat.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
-import { NotificationsService } from '../alerts.service';
 import { Router } from '@angular/router';
+import { Agent, AgentsService } from '../../agents.service';
+import { NotificationsService } from '../../alerts.service';
+import { ChatService } from '../../chat.service';
 
 interface Message {
     text: string;

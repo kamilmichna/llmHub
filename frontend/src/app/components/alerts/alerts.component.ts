@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { NotificationsService, INotification } from '../alerts.service';
 import { CommonModule } from '@angular/common';
+import { INotification, NotificationsService } from '../../alerts.service';
 
 @Component({
     selector: 'app-alerts',
