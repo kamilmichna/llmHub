@@ -23,7 +23,7 @@ async def create(model: AgentCreate, db: Session = Depends(get_db), user_id = De
         print(e)
         raise HTTPException(status_code=400, detail="Cannot create agent!")
     
-@router.get("/agents", tags=["agents"], response_model=list[AgentBase])
+@router.get("/agents", tags=["agents"], response_model=list[Agent])
 def list_agents(db: Session = Depends(get_db), user_id = Depends(get_current_user)):
     try:
         agents = get_agents(db, user_id)

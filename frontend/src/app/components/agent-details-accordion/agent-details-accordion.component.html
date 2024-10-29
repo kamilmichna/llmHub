@@ -19,15 +19,12 @@
   </div>
   <div class="collapse-content">
     <p class="my-2 font-bold">Created: {{ agent.created | date }}</p>
-    <!-- @if (agent.systemMessage) {
+    @if (agent.system_message) {
     <div class="mockup-code bg-base-300">
-      <pre
-        data-prefix=""
-        class="bg-cyan-600 text-warning-content"
-      ><code>Agent System Message</code></pre>
-      <pre data-prefix="1"><code>{{agent.systemMessage}}</code></pre>
+      <pre data-prefix="" class="bg-cyan-600 text-warning-content"><code>Agent System Message</code></pre>
+      <pre data-prefix="1"><code>{{agent.system_message}}</code></pre>
     </div>
-    } -->
+    }
   </div>
 </div>
 }
