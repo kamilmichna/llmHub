@@ -1,4 +1,9 @@
-<div>
+<div class="card-body">
+    <div class=" flex justify-between my-2">
+        <h2 class="card-title mb-2">Your AI API Keys</h2>
+        <button class="btn btn-primary btn-sm" (click)="addNewKey()">Create new</button>
+    </div>
+
     @if (apiKeys$ | async; as apiKeys) {
     <div class="overflow-x-auto">
         <table class="table w-full">
