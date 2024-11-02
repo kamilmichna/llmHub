@@ -28,6 +28,8 @@ export class ChatWindowComponent {
             text: 'Hello, how can i help you?',
         },
     ];
+    temperatureValue = 1;
+    topPValue = 1;
 
     constructor(
         private chatService: ChatService,
@@ -38,7 +40,6 @@ export class ChatWindowComponent {
     ngOnInit() {}
 
     async sendMessage() {
-        console.log(this.agent);
         if (this.chatInputMessage && this.agent?.name) {
             this.messages.push({
                 type: 'USER',
@@ -48,27 +49,37 @@ export class ChatWindowComponent {
                 type: 'LOADING',
                 text: '',
             });
-            await this.chatService
-                .sendMessageToChat(this.chatInputMessage, this.agent.name)
-                .subscribe({
-                    next: (resp) => {
-                        this.messages.pop();
-                        this.messages.push({
-                            type: 'AI',
-                            text: resp as string,
-                        });
-                    },
-                    error: () => {
-                        this.messages.pop();
-                        this.messages.push({
-                            type: 'AI',
-                            text: 'There was an error with response from llm model',
-                        });
-                    },
-                    complete: () => {
-                        this.chatInputMessage = '';
-                    },
-                });
+            (
+                await this.chatService.sendMessageToChat(
+                    this.chatInputMessage,
+                    this.agent.name,
+                    {
+                        temperature: this.temperatureValue || 1,
+                        topP: this.topPValue || 1,
+                    }
+                )
+            ).subscribe({
+                next: (resp) => {
+                    console.log(resp);
+                    this.messages = this.messages.filter(
+                        (item) => item.type !== 'LOADING'
+                    );
+                    this.messages.push({
+                        type: 'AI',
+                        text: resp as string,
+                    });
+                },
+                error: () => {
+                    this.messages.pop();
+                    this.messages.push({
+                        type: 'AI',
+                        text: 'There was an error with response from llm model',
+                    });
+                },
+                complete: () => {
+                    this.chatInputMessage = '';
+                },
+            });
         }
     }
 

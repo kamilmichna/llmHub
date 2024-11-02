@@ -3,16 +3,10 @@ import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../environments/environment';
 
-export enum PROVIDERS {
-    OpenAi,
-    Groq,
-}
-
 export interface Agent {
     id?: number;
     name: string;
     model: string;
-    provider: PROVIDERS;
     created: Date;
     system_message: string;
 }
@@ -42,16 +36,11 @@ export class AgentsService {
         });
     }
 
-    createAgent({
-        name,
-        provider,
-        systemMessage,
-    }: Record<string, string | null>) {
+    createAgent({ name, systemMessage }: Record<string, string | null>) {
         return this.http.post(
             `${this.apiUrl}/agents`,
             {
                 name: name,
-                provider: provider,
                 system_message: systemMessage,
             },
             { withCredentials: true }

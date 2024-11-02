@@ -27,7 +27,6 @@ export class AgentDetailsComponent {
 
     agentForm = this.fb.group({
         name: '',
-        provider: '',
         model: '',
         systemMessage: '',
     });

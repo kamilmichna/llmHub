@@ -7,4 +7,3 @@ class User(Base):
     email = Column(String, unique=True)
 
     agents = relationship("Agent", back_populates="owner")
-    api_keys = relationship("ApiKey", back_populates="owner")

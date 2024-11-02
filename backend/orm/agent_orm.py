@@ -4,7 +4,7 @@ from backend.models.agent import Agent as AgentModel
 from backend.schemas.agent import AgentCreate
 
 def create_agent(db: Session, agent: AgentCreate, user_id: int):
-    db_agent = AgentModel(provider=agent.provider, name=agent.name, system_message=agent.system_message, owner_id=user_id)
+    db_agent = AgentModel(name=agent.name, system_message=agent.system_message, owner_id=user_id)
     db.add(db_agent)
     db.commit()
     db.refresh(db_agent)
