@@ -37,7 +37,14 @@ export class ChatWindowComponent {
         private notificationsService: NotificationsService,
         private router: Router
     ) {}
-    ngOnInit() {}
+
+    ngOnInit() {
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                this.sendMessage();
+            }
+        });
+    }
 
     async sendMessage() {
         if (this.chatInputMessage && this.agent?.name) {
