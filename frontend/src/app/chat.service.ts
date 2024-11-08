@@ -9,24 +9,40 @@ import { from, Observable, tap } from 'rxjs';
 export class ChatService {
     apiUrl = environment.apiUrl;
 
-    constructor() {}
+    constructor(private http: HttpClient) {}
+
+    startConversation(agentName: string) {
+        return this.http
+            .post<string>(`${this.apiUrl}/agents/${agentName}/start`, null, {
+                withCredentials: true,
+            })
+            .pipe(
+                tap((res) => {
+                    console.log(`Started conversation with id ${res}`);
+                })
+            );
+    }
 
     async sendMessageToChat(
         message: string,
         agentName: string,
+        conversationUUID: string,
         params: {
             temperature: number;
             topP: number;
         }
     ) {
-        //TODO
         const resp = await fetch(`${this.apiUrl}/agents/${agentName}`, {
             method: 'POST',
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ message, ...params }),
+            body: JSON.stringify({
+                message,
+                conversation_uuid: conversationUUID,
+                ...params,
+            }),
         });
 
         const decoder = new TextDecoder('utf-8');

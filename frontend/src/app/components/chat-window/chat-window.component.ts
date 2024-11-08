@@ -1,4 +1,4 @@
-import { Component, Input, signal } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
@@ -19,7 +19,7 @@ interface Message {
     templateUrl: './chat-window.component.html',
     styleUrl: './chat-window.component.scss',
 })
-export class ChatWindowComponent {
+export class ChatWindowComponent implements OnInit, OnDestroy {
     @Input() agent?: Agent;
     chatInputMessage = '';
     messages: Message[] = [
@@ -30,6 +30,7 @@ export class ChatWindowComponent {
     ];
     temperatureValue = 1;
     topPValue = 1;
+    conversationUUID?: string = undefined;
 
     constructor(
         private chatService: ChatService,
@@ -44,10 +45,35 @@ export class ChatWindowComponent {
                 this.sendMessage();
             }
         });
+
+        try {
+            if (!this.agent?.name) {
+                throw new Error('No Agent Name!');
+            }
+            this.chatService.startConversation(this.agent?.name).subscribe({
+                next: (uuid: string) => (this.conversationUUID = uuid),
+                error: () => {
+                    throw new Error('No Agent Name!');
+                },
+            });
+        } catch (e) {
+            console.error(e);
+            alert(
+                'There is an error when trying to start chat. You still can chat with ai, but agent - specific features might not be available'
+            );
+        }
+    }
+
+    ngOnDestroy(): void {
+        // remove conversation data from backend
     }
 
     async sendMessage() {
-        if (this.chatInputMessage && this.agent?.name) {
+        if (
+            this.chatInputMessage &&
+            this.agent?.name &&
+            this.conversationUUID
+        ) {
             this.messages.push({
                 type: 'USER',
                 text: this.chatInputMessage,
@@ -60,6 +86,7 @@ export class ChatWindowComponent {
                 await this.chatService.sendMessageToChat(
                     this.chatInputMessage,
                     this.agent.name,
+                    this.conversationUUID,
                     {
                         temperature: this.temperatureValue || 1,
                         topP: this.topPValue || 1,

@@ -11,7 +11,7 @@ from backend.routes.auth import get_current_user
 from backend.schemas.agent import AgentBase, AgentCreate, Agent, AgentInvoke
 from sqlalchemy.orm import Session
 
-from backend.utils.llm import respond_to_message
+from backend.utils.llm import create_conversation, respond_to_message
 
 router = APIRouter()
 
@@ -78,13 +78,26 @@ def agent_on_message(
     existing_agent = get_agent_by_name(db, name=agent_name, user_id=user_id)
     if existing_agent is None:
         raise Exception("Agent with this name don`t exist")
-    print(payload)
     return StreamingResponse(
         respond_to_message(
             payload.message,
             existing_agent.system_message,
+            converstaion_uuid=payload.conversation_uuid,
             temperature=payload.temperature,
             topP=payload.topP,
         ),
         media_type="text/plain",
     )
+
+
+@router.post(
+    "/agents/{agent_name}/start", tags=["agents"], status_code=status.HTTP_200_OK
+)
+def agent_start_conversation(
+    agent_name,
+    user_id=Depends(get_current_user),
+):
+    try:
+        return create_conversation(user_id, agent_name)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail="Cannot start conversation")

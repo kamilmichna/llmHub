@@ -6,15 +6,39 @@ from langgraph.checkpoint.memory import MemorySaver
 from langchain.tools import BaseTool, StructuredTool, tool
 import uuid
 
-memory = MemorySaver()
+conversations = {}
 
 
-def create_conversation(system_message, temperature=1, topP=1):
-    return uuid.uuid4()
+def create_conversation(user_id, agent_name):
+    conversation_uuid = str(uuid.uuid4())
+    conversations[conversation_uuid] = {
+        "memory_saver": MemorySaver(),
+        "user_id": user_id,
+        "agent_name": agent_name,
+    }
+    return conversation_uuid
 
 
-def respond_to_message(message, system_message, temperature=1, topP=1):
-    llm = create_model(temperature, topP)
+def get_conversation(uuid):
+    print("CONVERSATIONS", conversations[uuid])
+    try:
+        print("USER ID", conversations[uuid].get("user_id"))
+        return conversations[uuid]
+    except Exception as e:
+        print(e)
+
+
+def close_conversation(uuid):
+    if uuid in conversations:
+        del conversations[uuid]
+
+
+def respond_to_message(
+    message, system_message, converstaion_uuid, temperature=1, topP=1
+):
+    print("GET CONVERSATION START !!!!")
+    conversation = get_conversation(converstaion_uuid)
+    llm = create_model(temperature, topP, conversation.get("memory_saver"))
     res = llm.stream(
         {
             "messages": [
@@ -33,10 +57,9 @@ def generate_res_stream(stream):
             yield s["agent"]["messages"][-1].content
         if "tools" in s:
             yield f'Calling Tool with name: {s["tools"]["messages"][-1].name}...'
-        print(s)
 
 
-def create_model(temperature, topP):
+def create_model(temperature, topP, memory_saver: MemorySaver):
     config = Config(".env")
     api_key = config("OPENAI_API_KEY")
     model = ChatOpenAI(
@@ -48,11 +71,11 @@ def create_model(temperature, topP):
         max_retries=2,
         api_key=api_key,
     )
-    graph = create_react_agent(model, [search], checkpointer=memory)
+    graph = create_react_agent(model, [search], checkpointer=memory_saver)
     return graph
 
 
 @tool
 def search(query: str) -> str:
-    """Return information about this application author"""
-    return "LangChain"
+    """Return information about this application or author"""
+    return "Author of this application is Kamil Michna. The application is the practical part of his engineering work. If you want to see his other projects, visit github.com/kamilmichna"
