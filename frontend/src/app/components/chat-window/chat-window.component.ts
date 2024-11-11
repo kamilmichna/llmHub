@@ -31,6 +31,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
     temperatureValue = 1;
     topPValue = 1;
     conversationUUID?: string = undefined;
+    files: FileList | [] = [];
 
     constructor(
         private chatService: ChatService,
@@ -66,6 +67,11 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         // remove conversation data from backend
+        if (this.agent?.name && this.conversationUUID) {
+            this.chatService
+                .closeConversation(this.conversationUUID)
+                .subscribe();
+        }
     }
 
     async sendMessage() {
@@ -115,6 +121,23 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
                 },
             });
         }
+    }
+
+    onFileChange(event: Event) {
+        const files = (event.target as HTMLInputElement).files;
+        if (files?.length) {
+            this.files = files;
+        } else {
+            this.files = [];
+        }
+    }
+
+    submitFile() {
+        if (!this.files?.length) return;
+
+        this.chatService
+            .submitFile(this.conversationUUID, this.files as FileList)
+            .subscribe();
     }
 
     clearChat() {

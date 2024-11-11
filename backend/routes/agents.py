@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile
 from fastapi.responses import StreamingResponse
 from backend.database import get_db
 from backend.orm.agent_orm import (
@@ -11,7 +11,11 @@ from backend.routes.auth import get_current_user
 from backend.schemas.agent import AgentBase, AgentCreate, Agent, AgentInvoke
 from sqlalchemy.orm import Session
 
-from backend.utils.llm import create_conversation, respond_to_message
+from backend.utils.llm import (
+    close_conversation,
+    create_conversation,
+    respond_to_message,
+)
 
 router = APIRouter()
 
@@ -101,3 +105,22 @@ def agent_start_conversation(
         return create_conversation(user_id, agent_name)
     except Exception as e:
         raise HTTPException(status_code=400, detail="Cannot start conversation")
+
+
+@router.post("/agents/{uuid}/close", tags=["agents"], status_code=status.HTTP_200_OK)
+def agent_start_conversation(
+    uuid,
+    user_id=Depends(get_current_user),
+):
+    try:
+        return close_conversation(user_id, uuid)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail="Cannot close conversation")
+
+
+@router.post("/agents/{uuid}/addFile", tags=["agents"])
+def upload_file(
+    files: list[UploadFile],
+    user_id=Depends(get_current_user),
+):
+    return {"filenames": [file.filename for file in files]}

@@ -20,7 +20,6 @@ def create_conversation(user_id, agent_name):
 
 
 def get_conversation(uuid):
-    print("CONVERSATIONS", conversations[uuid])
     try:
         print("USER ID", conversations[uuid].get("user_id"))
         return conversations[uuid]
@@ -28,9 +27,12 @@ def get_conversation(uuid):
         print(e)
 
 
-def close_conversation(uuid):
+def close_conversation(user_id, uuid):
     if uuid in conversations:
-        del conversations[uuid]
+        if conversations[uuid].get("user_id") is user_id:
+            print(conversations[uuid])
+            del conversations[uuid]
+            return uuid
 
 
 def respond_to_message(
@@ -77,5 +79,5 @@ def create_model(temperature, topP, memory_saver: MemorySaver):
 
 @tool
 def search(query: str) -> str:
-    """Return information about this application or author"""
+    """Return information about application author. Only use this tool when directly asked about it."""
     return "Author of this application is Kamil Michna. The application is the practical part of his engineering work. If you want to see his other projects, visit github.com/kamilmichna"

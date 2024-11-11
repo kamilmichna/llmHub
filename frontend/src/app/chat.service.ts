@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../environments/environment';
-import { from, Observable, tap } from 'rxjs';
+import { from, Observable, of, tap } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
@@ -19,6 +19,22 @@ export class ChatService {
             .pipe(
                 tap((res) => {
                     console.log(`Started conversation with id ${res}`);
+                })
+            );
+    }
+
+    closeConversation(conversationUuid: string) {
+        return this.http
+            .post<string>(
+                `${this.apiUrl}/agents/${conversationUuid}/close`,
+                null,
+                {
+                    withCredentials: true,
+                }
+            )
+            .pipe(
+                tap((res) => {
+                    console.log(`Closed conversation with id ${res}`);
                 })
             );
     }
@@ -59,5 +75,22 @@ export class ChatService {
         }
 
         return from(res);
+    }
+
+    submitFile(conversationUUID: string | undefined, files: FileList) {
+        console.log(files);
+        const formData = new FormData();
+
+        Array.from(files).forEach((item) => {
+            formData.append(`files`, item);
+        });
+
+        return this.http.post(
+            `${this.apiUrl}/agents/${conversationUUID}/addFile`,
+            formData,
+            {
+                withCredentials: true,
+            }
+        );
     }
 }
