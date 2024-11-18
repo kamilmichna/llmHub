@@ -1,11 +1,5 @@
 <app-dashboard-layout>
   <div class="flex-col w-4/5">
-    <div role="tablist" class="tabs tabs-bordered my-10">
-      <a role="tab" (click)="changeTab('agents')" class="tab font-bold"
-        [class.tab-active]="activeTab() === 'agents'">Manage Agents</a>
-      <a role="tab" (click)="changeTab('keys')" class="tab font-bold"
-        [class.tab-active]="activeTab() === 'keys'">Providers API Keys</a>
-    </div>
     @if (activeTab() === 'agents') {
     <app-agents-view class="card  my-10 bg-neutral text-neutral-content"></app-agents-view>
     } @else {

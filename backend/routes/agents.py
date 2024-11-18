@@ -15,7 +15,9 @@ from backend.utils.llm import (
     close_conversation,
     create_conversation,
     respond_to_message,
+    save_files_for_conversation,
 )
+from backend.utils.file_upload import get_file_upload_directory_path, save_file_to_disk
 
 router = APIRouter()
 
@@ -104,6 +106,7 @@ def agent_start_conversation(
     try:
         return create_conversation(user_id, agent_name)
     except Exception as e:
+        print(e)
         raise HTTPException(status_code=400, detail="Cannot start conversation")
 
 
@@ -120,7 +123,13 @@ def agent_start_conversation(
 
 @router.post("/agents/{uuid}/addFile", tags=["agents"])
 def upload_file(
+    uuid,
     files: list[UploadFile],
     user_id=Depends(get_current_user),
 ):
+
+    file_upload_dir = get_file_upload_directory_path()
+    file_path = f"{file_upload_dir}{uuid}/{files[0].filename}"
+    save_file_to_disk(file_path, files[0])
+    save_files_for_conversation(uuid, user_id, file_path)
     return {"filenames": [file.filename for file in files]}

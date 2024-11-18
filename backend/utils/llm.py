@@ -1,12 +1,26 @@
 from starlette.config import Config
 from langchain_core.messages import HumanMessage, SystemMessage
-from langchain_openai import ChatOpenAI
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langgraph.prebuilt import create_react_agent
 from langgraph.checkpoint.memory import MemorySaver
-from langchain.tools import BaseTool, StructuredTool, tool
+from langchain.tools import tool
+from langchain_core.vectorstores import InMemoryVectorStore
+from langchain_community.document_loaders import PyPDFLoader
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 import uuid
 
+base_system_message = "You are a helpful rag agent."
+
+
+def get_api_key():
+    config = Config(".env")
+    api_key = config("OPENAI_API_KEY")
+    return api_key
+
+
 conversations = {}
+
+embeddings_model = OpenAIEmbeddings(api_key=get_api_key())
 
 
 def create_conversation(user_id, agent_name):
@@ -14,6 +28,7 @@ def create_conversation(user_id, agent_name):
     conversations[conversation_uuid] = {
         "memory_saver": MemorySaver(),
         "user_id": user_id,
+        "files": create_vector_store(),
         "agent_name": agent_name,
     }
     return conversation_uuid
@@ -21,7 +36,6 @@ def create_conversation(user_id, agent_name):
 
 def get_conversation(uuid):
     try:
-        print("USER ID", conversations[uuid].get("user_id"))
         return conversations[uuid]
     except Exception as e:
         print(e)
@@ -30,7 +44,6 @@ def get_conversation(uuid):
 def close_conversation(user_id, uuid):
     if uuid in conversations:
         if conversations[uuid].get("user_id") is user_id:
-            print(conversations[uuid])
             del conversations[uuid]
             return uuid
 
@@ -38,12 +51,14 @@ def close_conversation(user_id, uuid):
 def respond_to_message(
     message, system_message, converstaion_uuid, temperature=1, topP=1
 ):
-    print("GET CONVERSATION START !!!!")
     conversation = get_conversation(converstaion_uuid)
+    retriever = conversation.get("files").as_retriever()
+    print(retriever.invoke(message))
     llm = create_model(temperature, topP, conversation.get("memory_saver"))
     res = llm.stream(
         {
             "messages": [
+                SystemMessage(content=base_system_message),
                 SystemMessage(content=system_message or ""),
                 HumanMessage(content=message),
             ]
@@ -62,8 +77,7 @@ def generate_res_stream(stream):
 
 
 def create_model(temperature, topP, memory_saver: MemorySaver):
-    config = Config(".env")
-    api_key = config("OPENAI_API_KEY")
+
     model = ChatOpenAI(
         model="gpt-4o-mini",
         temperature=temperature,
@@ -71,13 +85,51 @@ def create_model(temperature, topP, memory_saver: MemorySaver):
         max_tokens=None,
         timeout=None,
         max_retries=2,
-        api_key=api_key,
+        api_key=get_api_key(),
     )
-    graph = create_react_agent(model, [search], checkpointer=memory_saver)
+    tools = create_toolset()
+    graph = create_react_agent(model, tools, checkpointer=memory_saver)
     return graph
 
 
-@tool
-def search(query: str) -> str:
-    """Return information about application author. Only use this tool when directly asked about it."""
-    return "Author of this application is Kamil Michna. The application is the practical part of his engineering work. If you want to see his other projects, visit github.com/kamilmichna"
+def save_files_for_conversation(converstaion_uuid, user_id, file_path):
+    conversation = get_conversation(converstaion_uuid)
+    if conversation.get("user_id") is user_id:
+        vector_store = conversation.get("files")
+        if vector_store:
+            splitted_docs = load_pdf_file(file_path)
+            add_docs_to_vector_store(splitted_docs, vector_store)
+
+
+def create_toolset():
+    @tool
+    def search(query: str) -> str:
+        """Return information about application author. Only use this tool when directly asked about it."""
+        return "Author of this application is Kamil Michna. The application is the practical part of his engineering work. If you want to see his other projects, visit github.com/kamilmichna"
+
+    def rag(query: str) -> str:
+        """Return information in files uploaded by user."""
+        return "This is files info"
+
+    return [search, rag]
+
+
+def create_vector_store():
+    vector_store = InMemoryVectorStore(embeddings_model)
+    return vector_store
+
+
+def add_docs_to_vector_store(documents, vector_store: InMemoryVectorStore):
+    vector_store.add_documents(documents)
+
+
+def load_pdf_file(file_path):
+    loader = PyPDFLoader(file_path)
+    docs = loader.load()
+    return split_docs(docs)
+
+
+def split_docs(documents):
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=100, chunk_overlap=0)
+    splitted_docs = text_splitter.split_documents(documents)
+    return splitted_docs
