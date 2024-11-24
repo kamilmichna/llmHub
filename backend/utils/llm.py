@@ -53,8 +53,7 @@ def respond_to_message(
 ):
     conversation = get_conversation(converstaion_uuid)
     retriever = conversation.get("files").as_retriever()
-    print(retriever.invoke(message))
-    llm = create_model(temperature, topP, conversation.get("memory_saver"))
+    llm = create_model(temperature, topP, conversation.get("memory_saver"), retriever)
     res = llm.stream(
         {
             "messages": [
@@ -76,7 +75,7 @@ def generate_res_stream(stream):
             yield f'Calling Tool with name: {s["tools"]["messages"][-1].name}...'
 
 
-def create_model(temperature, topP, memory_saver: MemorySaver):
+def create_model(temperature, topP, memory_saver: MemorySaver, retriever):
 
     model = ChatOpenAI(
         model="gpt-4o-mini",
@@ -87,7 +86,7 @@ def create_model(temperature, topP, memory_saver: MemorySaver):
         max_retries=2,
         api_key=get_api_key(),
     )
-    tools = create_toolset()
+    tools = create_toolset(retriever)
     graph = create_react_agent(model, tools, checkpointer=memory_saver)
     return graph
 
@@ -101,7 +100,7 @@ def save_files_for_conversation(converstaion_uuid, user_id, file_path):
             add_docs_to_vector_store(splitted_docs, vector_store)
 
 
-def create_toolset():
+def create_toolset(retriever):
     @tool
     def search(query: str) -> str:
         """Return information about application author. Only use this tool when directly asked about it."""
@@ -109,7 +108,9 @@ def create_toolset():
 
     def rag(query: str) -> str:
         """Return information in files uploaded by user."""
-        return "This is files info"
+        print("RAG RAG RAG")
+        print(retriever.invoke(query))
+        return retriever.invoke(query)
 
     return [search, rag]
 
@@ -130,6 +131,6 @@ def load_pdf_file(file_path):
 
 
 def split_docs(documents):
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=100, chunk_overlap=0)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
     splitted_docs = text_splitter.split_documents(documents)
     return splitted_docs
