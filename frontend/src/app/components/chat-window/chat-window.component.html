@@ -76,7 +76,11 @@
   </div>
   <div class="fileSubmit mt-4">
     <input type="file" id="file" (change)="onFileChange($event)" multiple accept=".pdf">
-    <button class="btn btn-primary btn-sm" (click)="submitFile()" [disabled]="!files.length">Send</button>
+    <button class="btn btn-primary btn-sm" (click)="submitFile()" [disabled]="!files.length">Upload file
+      @if (uploadingFile()) {
+      <span class="loading loading-spinner loading-xs"></span>
+      }
+    </button>
   </div>
 
   <div class="chat-input">

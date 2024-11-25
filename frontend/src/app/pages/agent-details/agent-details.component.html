@@ -3,24 +3,14 @@
 @if (isNewAgentMode()) {
 <div class="p-5">
     <div class="w-100 flex justify-center mt-10">
-        <div class="card w-3/5 shadow-xl bg-base-200">
-            <div class="card-body" [formGroup]="agentForm">
-                <div class="flex flex-col">
-                    <label class="my-2"> Name of your Agent </label>
-                    <input formControlName="name" type="text" placeholder="Ex. Superhuman"
-                        class="input input-bordered w-full mb-2" required="" />
-                    <label>Select Model</label>
-                    <select formControlName="model" class="select select-bordered w-full mb-2">
-                        <option disabled selected>Model</option>
-                        <option>GPT-4</option>
-                        <option>Claude</option>
-                    </select>
-                </div>
-                <div>
-                    <label>System Message (not required)</label>
-                    <textarea class="textarea textarea-bordered textarea-md w-full"
-                        formControlName="systemMessage"></textarea>
-                </div>
+        <div class="card w-2/5 shadow-xl bg-base-200">
+            <div class="card-body flex flex-col" [formGroup]="agentForm">
+                <label class="my-2"> Name of your Agent </label>
+                <input formControlName="name" type="text" placeholder="Ex. Superhuman"
+                    class="input input-bordered w-full mb-2" required="" />
+                <label>System Message (not required)</label>
+                <textarea class="textarea textarea-bordered textarea-md w-full"
+                    formControlName="systemMessage"></textarea>
                 <button class="btn btn-primary" (click)="createAgent()" [disabled]="agentForm.invalid">
                     Submit
                     @if (loading()){

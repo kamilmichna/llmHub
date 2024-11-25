@@ -32,7 +32,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
     topPValue = 1;
     conversationUUID?: string = undefined;
     files: FileList | [] = [];
-
+    uploadingFile = signal(false);
     constructor(
         private chatService: ChatService,
         private agentsService: AgentsService,
@@ -134,10 +134,19 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
 
     submitFile() {
         if (!this.files?.length) return;
-
+        this.uploadingFile.set(true);
         this.chatService
             .submitFile(this.conversationUUID, this.files as FileList)
-            .subscribe();
+            .subscribe(async () => {
+                this.uploadingFile.set(false);
+                await Swal.fire({
+                    background: '#2a323c',
+                    color: '#a6adbb',
+                    title: 'File succesfully added',
+                    text: 'You can now ask agent about file content',
+                    icon: 'success',
+                });
+            });
     }
 
     clearChat() {
