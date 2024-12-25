@@ -6,5 +6,5 @@ COPY package*.json .
 RUN npm install
 COPY . .
 RUN npm run build
-
-CMD ["npx", "serve", "dist"]
+WORKDIR /src/app/dist/llmhub/browser/
+CMD ["npx", "serve", "."]
