@@ -106,9 +106,9 @@ def create_toolset(retriever):
         """Return information about application author. Only use this tool when directly asked about it."""
         return "Author of this application is Kamil Michna. The application is the practical part of his engineering work. If you want to see his other projects, visit github.com/kamilmichna"
 
+    @tool
     def rag(query: str) -> str:
         """Return information in files uploaded by user."""
-        print("RAG RAG RAG")
         print(retriever.invoke(query))
         return retriever.invoke(query)
 

@@ -7,4 +7,4 @@ RUN npm install
 COPY . .
 RUN npm run build
 WORKDIR /src/app/dist/llmhub/browser/
-CMD ["npx", "serve", "."]
+CMD ["npx", "serve", "-s", "."]
