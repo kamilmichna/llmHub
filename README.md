@@ -21,13 +21,4 @@ Each agent gets its own system prompt, personality, and conversation history —
 **Frontend** — Angular, TypeScript  
 **Infrastructure** — Docker Compose
 
-## Getting started
 
-### Prerequisites
-
-- Docker + Docker Compose
-- OpenAI API key (or compatible provider)
-
-### Run
-
-```bash
